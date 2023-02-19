@@ -1,7 +1,7 @@
 <template>
     <div class="login-component">
 
-      <h2 class="title">Welcome to Bahai Foundation</h2>
+      <h2 class="title">Welcome to Bahai</h2>
       <form class="form">
         <div class="form-group">
           <label for="email">Email:</label>
@@ -63,6 +63,7 @@
   .title {
     font-size: 28px;
     margin-bottom: 20px;
+    
   }
   
   .form {

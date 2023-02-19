@@ -38,9 +38,9 @@
   #btn1{
     color: red;
     width: 12rem;
-    padding: 5rem;
     font-size: 1.1rem;
     margin-top: 3rem;
+    padding: .5rem;
   }
   </style>
   

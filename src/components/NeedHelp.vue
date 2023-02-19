@@ -22,6 +22,20 @@
   </div>
 
   <div class="form-row">
+    <label for="gender">Gender:</label>
+    <div class="form-row">
+      <label>
+        <input type="radio" name="gender" value="male" v-model="gender">
+        Male
+      </label>
+      <label>
+        <input type="radio" name="gender" value="female" v-model="gender">
+        Female
+      </label>
+    </div>
+  </div>
+
+  <div class="form-row">
     <label for="nation">Nationality</label>
     <select  id="nation"  name="nationality" required v-model="nationality">
       <option value="" selected disabled hidden>Select Nationality</option>
@@ -85,7 +99,8 @@ export default {
         this.age ===""||
         this.nationality ===""||
         this.emirate ===""||
-        this.help ===""
+        this.help ===""||
+        this.gender === ""
 
         ){
           this.error = true
@@ -108,7 +123,8 @@ export default {
                     age:this.age,
                     nationality:this.nationality,
                     emirate:this.emirate,
-                    help:this.help
+                    help:this.help,
+                    gender:this.gender
 
                     
                 })
@@ -156,6 +172,8 @@ label {
   margin-bottom: 10px;
 }
 
+
+
 /* Form input */
 input,
 select {
@@ -197,6 +215,7 @@ select {
   top: 0;
 
 }
+
 
 
 /* Form button */

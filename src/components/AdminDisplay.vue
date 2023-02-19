@@ -8,7 +8,7 @@
         </div>
         <div class="navbar-brand">
           <a class="navbar-item" href="#">
-            <span class="navbar-item-title">My Awesome Products</span>
+            <span class="navbar-item-title">The Bahai Foundation</span>
           </a>
         </div>
         <div class="navbar-end">
@@ -19,6 +19,8 @@
         </div>
       </nav>
       <side-menu v-if="isMenuOpen" @close-menu="isMenuOpen = false"></side-menu>
+      <h4 class="req">New Help Requests</h4>
+
       <div class="product-item" v-for="(product, index) in products" :key="index" @click="toggleDetails(index)">
         <h3>{{ product.name }}</h3>
         <i>{{ product.nationality }}</i>
@@ -154,7 +156,9 @@
     z-index: 999;
   
   }
-  
+  .req{
+    display: block;
+  }
   .navbar-item {
     color: white;
     font-weight: bold;

@@ -10,6 +10,7 @@
             <i class="fas fa-home fa-fw"></i>
             <a href="#">Home</a>
           </li>
+
           <li>
             <i class="fas fa-shopping-cart fa-fw"></i>
             <a href="#">Products</a>
@@ -22,6 +23,7 @@
             <i class="fas fa-phone fa-fw"></i>
             <a href="#">Contact</a>
           </li>
+          <li>Exciting features are coming</li>
         </ul>
       </div>
     </div>

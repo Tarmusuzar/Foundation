@@ -62,8 +62,16 @@
     <select id="select" name="select" required v-model="help">
       <option value="" selected disabled hidden>Select One</option>
       <option value="need job">I need a job</option>
-      <option value="need house">I need a house</option>
+      <option value="need house">I need a house to stay</option>
       <option value="need food">I need food</option>
+      <option value="need food">I need to go Home</option>
+      <option value="need food">I'm in overstay</option>
+      <option value="need food">I need someone to talk to</option>
+      <option value="need food">I am depressed</option>
+      <option value="need food">I want to join bahai</option>
+      <option value="need food">Call Me</option>
+      <option value="need food">I am sleeping on streets</option>
+      <option value="need food">Other</option>
     </select>
   </div>
 

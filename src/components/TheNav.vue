@@ -1,7 +1,7 @@
 <template>
      <nav>
   <div class="logo">
-    <h1> Foundation</h1>
+    <h1> The Bahai Foundation</h1>
   </div>
 </nav>
 </template>

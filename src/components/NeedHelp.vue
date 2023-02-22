@@ -117,7 +117,7 @@ export default {
           }, 4000);
         }else{
           this.error=false
-          fetch('https://my-vue-app-8da88-default-rtdb.firebaseio.com/products/bahai.json',
+          fetch('https://my-vue-app-8da88-default-rtdb.firebaseio.com/products/trial.json',
                 //go to products file in firebase and create the perimeter folder
             {   
                 method:'post',

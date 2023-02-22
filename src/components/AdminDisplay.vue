@@ -1,251 +1,104 @@
 <template>
-    <div class="product-list">
-      <nav class="navbar" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand" @click="toggleMenu">
-          <a class="navbar-item" href="#">
-            <span class="icon"><i class="fas fa-bars"></i></span>
-          </a>
-        </div>
-        <div class="navbar-brand">
-          <a class="navbar-item" href="#">
-            <span class="navbar-item-title">The Bahai Foundation</span>
-          </a>
-        </div>
-        <div class="navbar-end">
-          <a class="navbar-item" href="#">
-            <span class="icon"><i class="fas fa-bell"></i></span>
-            <span class="badge" v-if="notificationCount > 0">{{ notificationCount }}</span>
-          </a>
-        </div>
-      </nav>
-      <side-menu v-if="isMenuOpen" @close-menu="isMenuOpen = false"></side-menu>
-      <h4 class="req">New Help Requests</h4>
+  <admin-nav
+    @home="toggleDisplay('new-requests')"
+    @newRequests="toggleDisplay('new-requests')"
+    @rejectedRequests="toggleDisplay('rejected-requests')"
+    @acceptedRequests="toggleDisplay('accepted-requests')"
+    @completedRequests="toggleDisplay('accepted-requests')"
+  ></admin-nav>
+  <ul class="sub-nav">
+    <li :class="{ active: display === 'new-requests' }" @click="toggleDisplayMain('new-requests')">New Requests</li>
+    <li :class="{ active: display === 'accepted-requests' }" @click="toggleDisplayMain('accepted-requests')">Completed Requests</li>
+    <li :class="{ active: display === 'rejected-requests' }" @click="toggleDisplayMain('rejected-requests')">Rejected Requests</li>
+  </ul>
+  <component :is="display"></component>
+</template>
 
-      <div class="product-item" v-for="(product, index) in products" :key="index" @click="toggleDetails(index)">
-        <h3>{{ product.name }}</h3>
-        <i>{{ product.nationality }}</i>
-  
-        <section id="help">
-          <p v-if="product.detailsVisible" class="no"><i class="fa-solid fa-xmark"></i>Can't Help</p>
-  
-          <p v-if="product.detailsVisible" class="yes"><i class="fa-solid fa-check"></i>Help</p>
-        </section>
-        <p v-if="product.detailsVisible">Number: {{ product.number }}</p>
-        <p v-if="product.detailsVisible">Email: {{ product.email }}</p>
-        <p v-if="product.detailsVisible">Age: {{ product.age }}</p>
-        <p v-if="product.detailsVisible">Gender: {{ product.gender }}</p>
-        <p v-if="product.detailsVisible">Nationality: {{ product.nationality }}</p>
-        <p v-if="product.detailsVisible">Emirate: {{ product.emirate }}</p>
-        <p v-if="product.detailsVisible">Help: {{ product.help }}</p>
-        <p class="details-toggle">{{ product.detailsVisible ? 'Hide details' : 'View details' }}</p>
-      </div>
-    </div>
-  </template>
-  
-  <script>
-  import SideMenu from './SideMenu.vue';
-  
-  export default {
-    data() {
-      return {
-        products: [
-        
-          // add more products here
-        ],
-        isMenuOpen: false,
-      };
+<script>
+import AcceptedRequests from './AcceptedRequests.vue'
+import AdminNav from './AdminNav.vue';
+import NewRequests from './NewRequests.vue'
+import RejectedRequests from './RejectedRequests.vue'
+
+export default {
+  data(){
+    return{
+      display:'new-requests'
+    }
+  },
+  components:{
+    AdminNav,
+    NewRequests,
+    AcceptedRequests,
+    RejectedRequests
+  },
+  methods:{
+    toggleDisplayMain(display){
+      this.display = display
     },
-    methods: {
-      toggleDetails(index) {
-        this.products[index].detailsVisible = !this.products[index].detailsVisible;
-      },
-      toggleMenu() {
-        this.isMenuOpen = !this.isMenuOpen;
-      },
-    },
-    computed: {
-      notificationCount() {
-        return this.products.length;
-      },
-    },
-    components: {
-      SideMenu,
-    },
-    beforeMount(){
-  
-         
-         fetch('https://my-vue-app-8da88-default-rtdb.firebaseio.com/products/bahai.json')
-         .then(response=>{
-             if(response.ok){
-                 return response.json()
-             }else{
-                 return []
-             }
-         })
-         .then(data=>{
-             for(const dat in data){
-                  
-                      this.products.push(data[dat])
-  
-                  console.log(dat)
-             }
-         
-             
-         })
-         console.log(this.products)
-  
-         
-        
-  
-     },
-     
-  };
-  </script>  
-    <style scoped>
-    .product-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    toggleDisplay(display){
+      this.display = display
+      this.$store.commit('showSideMenu')
+    }
+  },
+  provide(){
+    return{
+      toggleDisplay:this.toggleDisplay
+    }
   }
-  a{
-      text-decoration: none;
-  }
-  
-  .product-item {
-    margin: 10px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    width: 300px;
-    height: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    background-color: white;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    transition: all 0.2s ease-in-out;
-  }
-  
-  .product-item:hover {
-    transform: translateY(-10px);
-  }
-  
-  .details-toggle,.yes, .no {
-    color: #8F3AFF;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-  }
-  
-  .details-toggle:hover {
-    color: #2C0480;
-  }
-  
-  .navbar {
-    background: linear-gradient(to right, #8F3AFF, #2C0480);
-    color: white;
-    padding: 1rem;
-    width: 100%;
+}
+</script>
+
+<style scoped>
+  /* Styling for the sub nav container */
+  .sub-nav {
     display: flex;
     justify-content: space-between;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    position: sticky;
-    top: 0;
-    z-index: 999;
-  
-  }
-  .req{
-    display: block;
-  }
-  .navbar-item {
-    color: white;
-    font-weight: bold;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+    border-radius: 5px;
   }
   
-  
-  
-  
-  
-  .icon {
-    margin-right: 5px;
-  }
-  .navbar-brand {
-      display: flex;
-      align-items: center;
-    }
-  
-    .navbar-end {
-      display: flex;
-      align-items: center;
-    }
-  
-    .navbar-item {
-      margin: 0 10px;
-    }
-  
-    .fa-bars, .fa-bell {
-      font-size: 1.5rem;
-      cursor: pointer;
-    }
-  
-    .fa-bell {
-      position: relative;
-    }
-  
-  
-    .navbar-item {
-    position: relative;
-  }
-    .badge {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    min-width: 18px;
+  .sub-nav li {
+    flex-basis: 30%;
     text-align: center;
-    background-color: red;
-    color: white;
-    border-radius: 50%;
-    font-size: 0.8rem;
-    padding: 2px;
-    z-index: 1;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
   }
-   #help{
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      /* justify-self: flex-end; */
-      width: inherit;
-      margin: .2rem;
   
-   }
-   .no{
-      margin-left: 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: auto;
-      color: red;
-      min-width: 5.7rem;
-      text-decoration: underline;
-   }
-   .yes{
-      text-decoration: underline;
+  .sub-nav li:hover {
+    background-color: #ddd;
+  }
   
-      margin-right: 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: auto;
-      color: green;
-      min-width: 2.7rem;
-   }
-   
-   
+  .sub-nav li.active {
+    background-color: #4CAF50;
+    color: white;
+    /* Add special identifying design for active li */
+    border: 2px solid #4CAF50;
+    border-radius: 5px;
+  }
   
+  .sub-nav li.active:hover {
+    background-color: #4CAF50;
+  }
   
+  /* Add animations */
+  .sub-nav li {
+    animation: fadeInUp 0.5s ease;
+  }
   
-  
-  
-    </style>
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 20px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>

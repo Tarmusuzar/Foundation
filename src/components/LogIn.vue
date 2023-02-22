@@ -33,7 +33,7 @@
       submitForm() {
         if(
             this.email == ""|| this.password == ""||
-            (this.email !="papa@bahai.com" && this.password !="family")
+            this.email !="papa@bahai.com" || this.password !="family"
 
         ){
             this.error = true

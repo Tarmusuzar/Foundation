@@ -64,14 +64,14 @@
       <option value="need job">I need a job</option>
       <option value="need house">I need a house to stay</option>
       <option value="need food">I need food</option>
-      <option value="need food">I need to go Home</option>
-      <option value="need food">I'm in overstay</option>
-      <option value="need food">I need someone to talk to</option>
-      <option value="need food">I am depressed</option>
-      <option value="need food">I want to join bahai</option>
-      <option value="need food">Call Me</option>
-      <option value="need food">I am sleeping on streets</option>
-      <option value="need food">Other</option>
+      <option value="need to go home">I need to go Home</option>
+      <option value="in overstay">I'm in overstay</option>
+      <option value="consellor">I need someone to talk to</option>
+      <option value="depressed">I am depressed</option>
+      <option value="join bahai">I want to join bahai</option>
+      <option value="call me">Call Me</option>
+      <option value="on streets">I am sleeping on streets</option>
+      <option value="other">Other</option>
     </select>
   </div>
 

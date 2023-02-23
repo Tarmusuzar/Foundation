@@ -1,4 +1,5 @@
 <template>
+  <loading-spinner v-if="loading"></loading-spinner>
     <accept-dialog
       :visible="dialogVisible"
       :header="header"
@@ -24,6 +25,8 @@
     </accept-dialog>
 
     <div class="product-list">
+      <p class="noItems" v-if="products.length<1" >    <i class="fas fa-exclamation-circle"></i>There are no accepted applications yet</p>
+
       <div class="product-item" v-for="(product, index) in products" :key="index">
         <section id="help">
           <div class="buttons">
@@ -39,12 +42,11 @@
             <p v-else class="help-icon">
               <i class="fa-solid fa-hands-heart"></i>
             </p>
-            <p class="details-toggle" @click="toggleDetails(index)">
-              {{ product.detailsVisible ? 'Hide details' : 'View details' }}
-            </p>
+          
           </div>
         </section>
         <div class="product-info">
+          <b style="color:green">You Helped!</b>
           <h3>{{ product.name }}</h3>
           <h3>Helped By : <i style="color:gray">{{ product.reason }}</i></h3>
           <div class="details" v-if="product.detailsVisible">
@@ -56,15 +58,20 @@
             <p>Emirate: <b>{{ product.emirate }}</b></p>
             <p>Help: <b>{{ product.help }}</b></p>
           </div>
+          <p class="details-toggle" @click="toggleDetails(index)">
+              {{ product.detailsVisible ? 'Hide details' : 'View details' }}
+            </p>
         </div>
       </div>
     </div>
   </template><script>
 // import DoneHelping from './DoneHelping.vue';
 import AcceptDialog from './AcceptDialog.vue'
+import LoadingSpinner from './LoadingSpinner.vue';
 export default {
   data() {
     return {
+      loading:false,
       email:'',
        phoneNumber:'',
       pendingAccept:[],
@@ -120,6 +127,7 @@ export default {
       this.isMenuOpen = !this.isMenuOpen;
     },
     fetchProducts() {
+      this.loading = true
       fetch('https://my-vue-app-8da88-default-rtdb.firebaseio.com/products/accepted.json')
         .then((response) => {
           if (response.ok) {
@@ -130,10 +138,15 @@ export default {
         })
         .then((data) => {
           this.products = data;
+          this.loading = false
+
+
         })
         .catch((error) => {
           console.log(error);
+ 
         });
+        
     },
   },
   computed: {
@@ -148,14 +161,17 @@ export default {
   }
   ,
   emailLink(){
+
     return 'mailto:'+this.email
   }
   },
   beforeMount() {
     this.fetchProducts();
   },
+  
   components: {
     AcceptDialog,
+    LoadingSpinner
     // DoneHelping
   },
 };

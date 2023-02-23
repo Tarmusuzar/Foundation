@@ -27,6 +27,9 @@ const store = createStore({
       },
       changeLoading(state){
         state.isLoading = !state.isLoading
+      },
+      logout(state){
+        state.login = false
       }
     }
 })

@@ -1,32 +1,37 @@
 <template>
-   <nav class="navbar" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand" @click="toggleMenu">
-    <a class="navbar-item" href="#">
-      <span class="icon"><i class="fas fa-bars"></i></span>
-    </a>
-  </div>
-  <div class="navbar-brand">
-    <a class="navbar-item" href="#">
-      <span class="navbar-item-title">The Bahai Family</span>
-    </a>
-  </div>
-  <div class="navbar-end">
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand" @click="toggleMenu">
+      <a class="navbar-item" href="#">
+        <span class="icon"><i class="fas fa-bars"></i></span>
+      </a>
+    </div>
+    <div class="navbar-brand">
+      <a class="navbar-item" href="#">
+        <span class="navbar-item-title">The Bahai Family</span>
+      </a>
+    </div>
+    <div class="navbar-end">
+      <a class="navbar-item" href="#" @click="showSearch = !showSearch">
+        <span class="icon"><i class="fas fa-search"></i></span>
+      </a>
+      <a class="navbar-item" href="#">
+        <span class="icon"><i class="fas fa-filter"></i></span>
+      </a>
+      <a class="navbar-item" href="#" @click="$emit('newRequests')">
+        <span class="icon"><i class="fas fa-bell"></i></span>
+        <span class="badge" v-if="notificationCount > 0">{{ notificationCount }}</span>
+      </a>
+    </div>
     
-    <a class="navbar-item" href="#">
-      <span class="icon"><i class="fas fa-search"></i></span>
-    </a>
-    <a class="navbar-item" href="#">
-      <span class="icon"><i class="fas fa-filter"></i></span>
-    </a>
-    <a class="navbar-item" href="#" @click="toggleDisplay('new-requests')">
-      <span class="icon"><i class="fas fa-bell"></i></span>
-      <span class="badge" v-if="notificationCount > 0">{{ notificationCount }}</span>
-    </a>
-  </div>
-</nav>
+<a class="navbar-item" href="#" v-if="showSearch" @click="showSearch = false">
+  <span class="icon"><i class="fas fa-times"></i></span>
+</a>
 
-
-    <side-menu v-if="sideMenu"
+    <div class="navbar-item" v-if="showSearch">
+      <input type="text" placeholder="Search...">
+    </div>
+  </nav>
+  <side-menu v-if="sideMenu"
      @close-menu="toggleMenu()"
       @home="$emit('home')"   
       @newRequests="$emit('newRequests')"
@@ -35,14 +40,14 @@
     @completedRequests="$emit('completedRequests')"
 
      ></side-menu>
-
 </template>
-    <script>
+  <script>
     import SideMenu from './SideMenu.vue';
     
     export default {
       data() {
         return {
+          showSearch: false,
           products: [
           
             // add more products here
@@ -101,6 +106,12 @@
     };
     </script>  
       <style scoped>
+      nav{
+        overflow-x: hidden;
+      }
+      input[type="text"] {
+  max-width: 80%;
+}
       .product-list {
       display: flex;
       flex-wrap: wrap;
@@ -109,6 +120,11 @@
     a{
         text-decoration: none;
     }
+    .search-bar {
+  position: fixed;
+  z-index: 9999;
+}
+
     
     .product-item {
       margin: 10px;

@@ -1,4 +1,5 @@
 <template>
+  <loading-spinner v-if="loading"></loading-spinner>
   <the-dialog
   :visible="dialogVisible"
     :header="header"
@@ -70,15 +71,17 @@
 
 </done-helping>
   <div class="product-list">
+    <p class="noItems" v-if="products.length<1" >    <i class="fas fa-exclamation-circle"></i>There are no rejected applications yet</p>
     <div class="product-item" v-for="(product, index) in products" :key="index">
       <section id="help">
         
         <p v-if="product.detailsVisible" class="yes"  @click="showDialogTwo(product,product.number,product.email)">
           <i class="fa-solid fa-check" ></i>
-          Accept
+          Help
         </p>
       </section>
-      
+      <b style="color:red">Rejected : ({{ product.reason }}) </b>
+
       <h3>{{ product.name }}</h3>
       <i>{{ product.nationality }}</i>
       <p v-if="product.detailsVisible">id: <b>{{ product.id }}</b></p>
@@ -97,12 +100,14 @@
 
 </template>
 <script>
+import LoadingSpinner from './LoadingSpinner.vue';
 import TheDialog from './TheDialog.vue'
 import DoneHelping from './DoneHelping.vue';
 export default {
 data() {
 
   return {
+    loading:false,
     email:'',
     phoneNumber:'',
     optionSelected:false,
@@ -160,7 +165,7 @@ methods: {
   }
 
   // remove the selected product from the Firebase database
-  const url = `https://my-vue-app-8da88-default-rtdb.firebaseio.com/products/trial/${item.id}.json`;
+  const url = `https://my-vue-app-8da88-default-rtdb.firebaseio.com/products/bahai/${item.id}.json`;
   fetch(url, {
     method: 'DELETE'
   }).then(response => {
@@ -200,6 +205,7 @@ methods: {
     if(this.acceptReason == ''){
       this.optionSelected = true
     }else{
+      this.loading = true
        // const reason = this.acceptReason
        this.pendingAccept.forEach(item=>{
       fetch('https://my-vue-app-8da88-default-rtdb.firebaseio.com/products/accepted.json',
@@ -233,14 +239,13 @@ methods: {
                   }
 
   // remove the selected product from the Firebase database
-  const url = `https://my-vue-app-8da88-default-rtdb.firebaseio.com/products/trial/${item.id}.json`;
+  const url = `https://my-vue-app-8da88-default-rtdb.firebaseio.com/products/bahai/${item.id}.json`;
   fetch(url, {
     method: 'DELETE'
   }).then(response => {
     if (response.ok) {
       console.log(`Product ${item.id} deleted successfully`);
-      console.log(item)
-    } else {
+this.loading = false    } else {
       console.error(`Failed to delete product ${item.id}`);
     }
   }).catch(error => {
@@ -313,7 +318,9 @@ computed: {
 },
 
 beforeMount() {
+  this.loading = true
   fetch('https://my-vue-app-8da88-default-rtdb.firebaseio.com/products/reject.json')
+
     .then((response) => {
       if (response.ok) {
         return response.json();
@@ -324,17 +331,24 @@ beforeMount() {
     .then((data) => {
       for (const id in data) {
         this.products.push({id,...data[id]});
+        this.loading = false
+
+
       }
+
+
     });
 },
 components:{
   TheDialog, 
-  DoneHelping
+  DoneHelping,
+  LoadingSpinner
 }
 };
 </script>
 
 <style scoped>
+
 .product-list {
 display: flex;
 flex-wrap: wrap;

@@ -1,7 +1,8 @@
 <template>
+  <loading-spinner v-if="loading"></loading-spinner>
     <div class="login-component">
 
-      <h2 class="title">Welcome to me</h2>
+      <h2 class="title">Welcome to Bahai</h2>
       <form class="form">
         <div class="form-group">
           <label for="email">Email:</label>
@@ -20,30 +21,42 @@
   </template>
   
   <script>
+  import LoadingSpinner from './LoadingSpinner.vue';
   export default {
     name: 'LoginComponent',
     data() {
       return {
         email: '',
         password: '',
-        error:false
+        error:false,
+        loading:false
       };
     },
     methods: {
       submitForm() {
         if(
             this.email == ""|| this.password == ""||
-            this.email !="papa@bahai.com" || this.password !="family"
+            this.email !="papa@bahai.com" || this.password !="humans"
 
         ){
             this.error = true
         }else{
+            this.loading = true
             this.error =false
-            this.$store.state.login = true
-            this.$router.push('/admin')
+
+            setTimeout(() => {
+              this.loading = false
+              this.$router.push('/admin')
+              this.$store.state.login = true
+
+
+            }, 700);
         }
       },
     },
+    components:{
+      LoadingSpinner
+    }
   };
   </script>
   

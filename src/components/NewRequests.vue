@@ -36,6 +36,7 @@
   <select id="reason" v-model="rejectReason">
     <option value="" selected disabled hidden>Select One</option>
 
+    <option value="repeated application">Repeated Application</option>
     <option value="no-funds">No funds at the moment</option>
     <option value="no-food">No food in stock</option>
     <option value="no-jobs">No jobs availabale</option>
@@ -71,7 +72,8 @@
 
 </done-helping>
   <div class="product-list">
-    <p v-if="products.length<1" class="noItem">no item</p>
+    <p class="noItems" v-if="products.length<1" >    <i class="fas fa-exclamation-circle"></i>There are no new applications yet</p>
+
     <div class="product-item" v-for="(product, index) in products" :key="index">
       <section id="help">
         <p v-if="product.detailsVisible" class="no" @click="showDialogOne(product)">
@@ -82,10 +84,10 @@
         </p>
         <p v-if="product.detailsVisible" class="yes"  @click="showDialogTwo(product,product.number,product.email)">
           <i class="fa-solid fa-check" ></i>
-          Accept
+          Help
         </p>
       </section>
-      
+      <b style="color:orange">Pending</b>
       <h3>{{ product.name }}</h3>
       <i>{{ product.nationality }}</i>
       <p v-if="product.detailsVisible">id: <b>{{ product.id }}</b></p>
@@ -140,6 +142,7 @@ methods: {
     if(this.rejectReason == ''){
       this.optionSelected = true
     }else{
+      this.loading =true
       this.pendingReject.forEach(item=>{
       fetch('https://my-vue-app-8da88-default-rtdb.firebaseio.com/products/reject.json',
               //go to products file in firebase and create the perimeter folder
@@ -170,12 +173,13 @@ methods: {
   }
 
   // remove the selected product from the Firebase database
-  const url = `https://my-vue-app-8da88-default-rtdb.firebaseio.com/products/trial/${item.id}.json`;
+  const url = `https://my-vue-app-8da88-default-rtdb.firebaseio.com/products/bahai/${item.id}.json`;
   fetch(url, {
     method: 'DELETE'
   }).then(response => {
     if (response.ok) {
       console.log(`Product ${item.id} deleted successfully`);
+      this.loading = false
     } else {
       console.error(`Failed to delete product ${item.id}`);
     }
@@ -210,7 +214,7 @@ methods: {
     if(this.acceptReason == ''){
       this.optionSelected = true
     }else{
-      this.loading = true
+    this.loading = true
        // const reason = this.acceptReason
     this.pendingAccept.forEach(item=>{
       fetch('https://my-vue-app-8da88-default-rtdb.firebaseio.com/products/accepted.json',
@@ -244,15 +248,16 @@ methods: {
                   }
 
   // remove the selected product from the Firebase database
-  const url = `https://my-vue-app-8da88-default-rtdb.firebaseio.com/products/trial/${item.id}.json`;
+  const url = `https://my-vue-app-8da88-default-rtdb.firebaseio.com/products/bahai/${item.id}.json`;
   fetch(url, {
     method: 'DELETE'
   }).then(response => {
     if (response.ok) {
       console.log(`Product ${item.id} deleted successfully`);
-      console.log(item)
+      this.loading = false
     } else {
       console.error(`Failed to delete product ${item.id}`);
+
     }
   }).catch(error => {
     console.error(error);
@@ -271,7 +276,6 @@ methods: {
     })
 
     this.dialogVisible = false
-    this.loading = false
     
       
     }
@@ -332,10 +336,11 @@ computed: {
 },
 
 beforeMount() {
-  fetch('https://my-vue-app-8da88-default-rtdb.firebaseio.com/products/trial.json')
+          this.loading = true
+
+  fetch('https://my-vue-app-8da88-default-rtdb.firebaseio.com/products/bahai.json')
     .then((response) => {
       if (response.ok) {
-        this.loading = true
 
         return response.json();
       } else {

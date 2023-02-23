@@ -38,7 +38,7 @@
         <i class="fas fa-envelope fa-fw"></i>
         <a href="#">Email list</a>
       </li>
-      <li>
+      <li @click="this.$store.commit('logout')">
         <i class="fas fa-sign-out-alt fa-fw"></i>
         <a href="#">Logout</a>
       </li>

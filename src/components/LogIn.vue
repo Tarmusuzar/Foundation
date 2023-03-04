@@ -43,9 +43,15 @@
         }else{
             
             setTimeout(() => {
-              this.loading = false
-             
-             alert("Session Expired, Please contact the administrator")
+
+               this.loading = false
+
+               this.$store.state.login = true
+
+              this.$router.push('/admin')
+
+
+          
 
 
             }, 700);
